@@ -51,7 +51,7 @@ export class CommanderClient extends Discord.Client {
             }
 
             CommanderUtils.registerModulesIn(this.moduleRegistry, this._commanderOptions?.modulePath as string);
-            CommanderUtils.registerBuiltinModules(this.moduleRegistry);
+            //CommanderUtils.registerBuiltinModules(this.moduleRegistry);
             if(this._commanderOptions?.eventModulePath) {
                 let events = await CommanderUtils.registerEventModules(this.eventRegistry, this._commanderOptions?.eventModulePath);
                 events.forEach(event => {

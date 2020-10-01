@@ -91,6 +91,7 @@ export default class CommanderUtils {
         });
     }
 
+    /*
     static registerBuiltinModules(registry: ModuleRegistry) {
         let localCount = 0;
         glob(process.cwd() + '/src/builtins/**.+(ts|js)', async (err, matches) => {
@@ -106,6 +107,7 @@ export default class CommanderUtils {
             console.log("[REGISTRY/INFO] Registered a total of " + localCount + " builtin module(s).");
         })
     }
+    */
 
     static registerEventModules(registry: EventRegistry, path: string): Promise<EventModule[]> {
         let localCount = 0;
