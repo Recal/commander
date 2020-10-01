@@ -9,25 +9,20 @@ import EventModule from '../module/EventModule';
 export default class CommanderUtils {
     static addCachedUsers(client: CommanderClient, cache: Collection<string, User>) {
         cache.each( (user: User, _: string, __: Collection<string, User>) => {
-            if(client.getCommanderOptions().owners.indexOf(user.id) != -1) {
-                client.getUsers().register({
+
+
+            const user_is_owner = client.getCommanderOptions().owners.includes(user.id);
+            const registryUser = {
                     user: user,
                     id: user.id,
                     username: user.username,
                     tag: user.tag,
-                    level: Infinity,
-                    owner: true
-                });
+                    level: user_is_owner ? Infinity : 0,
+                    owner: user_is_owner                        
             }
+
             
-            client.getUsers().register({
-                user: user,
-                id: user.id,
-                username: user.username,
-                tag: user.tag,
-                level: 0,
-                owner: false
-            });
+            client.getUsers().register(registryUser);
         });
         console.log("[CACHE/SUCCESS] Cached " + cache.size + " user(s).");
     }
@@ -41,28 +36,28 @@ export default class CommanderUtils {
     }
 
     static async handle(client: CommanderClient, msg: Message, user: GuildMember | User) {
-        let prefix = client.getCommanderOptions()!.prefix;
+        const prefix = client.getCommanderOptions()!.prefix;
         if(msg.content.startsWith(prefix)) {
             const registry = client.getModules();
             const userRegistry = client.getUsers();
 
-            let registryUser = await userRegistry.get(user.id);
+            const registryUser = await userRegistry.get(user.id);
 
-            let args: string[] = msg.content.split(" ");
-            let commandName = args[0];
+            const args: string[] = msg.content.split(" ");
+            const commandName = args[0];
             args.shift();
 
-            let command = await registry.getFromPotentialAlias(commandName.toLowerCase().replace(new RegExp("^"+prefix), ''));
+            const command = await registry.getFromPotentialAlias(commandName.toLowerCase().replace(new RegExp("^"+prefix), ''));
 
             if(command) {
-            let commandOptions = command.getOptions()!;
+                const commandOptions = command.getOptions()!;
                 if(
                     this.canExecute(
                         commandOptions.level as number, 
                         registryUser.level, 
                         commandOptions.owner, 
                         registryUser.owner
-                )) command.run(msg, [args]);
+                    )) command.run(msg, [args]);
             }
         }
     }
@@ -73,13 +68,13 @@ export default class CommanderUtils {
         glob(path + '/**.+(ts|js)', async (err, matches) => {
             if(err) throw err;
 
-            for(let file of matches) {
+            for(const file of matches) {
                 const Command = (await import(file)).default;
 
-                let registryCommand = new Command();
-                let name = registryCommand.getOptions().name;
+                const registryCommand = new Command();
+                const name = registryCommand.getOptions().name;
 
-                if(await registry.get(name) == null) {
+                if(!(await registry.get(name))) {
                     registry.add(registryCommand as CommandModule);
                     localCount += 1;
                 } else {
