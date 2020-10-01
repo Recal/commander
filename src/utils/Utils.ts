@@ -108,7 +108,7 @@ export default class CommanderUtils {
         let localCount = 0;
        
 
-        return new Promise( (accept: any) => {
+        return new Promise( ( accept ) => {
                 var events: EventModule[] = [];
                 glob(path + '/**.+(ts|js)', async (err, matches) => {
                     if(err) throw err;
