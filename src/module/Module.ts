@@ -11,15 +11,14 @@ type CommandOptions = {
 
 export default abstract class CommandModule {
     private moduleOptions: CommandOptions | null = null;
-    readonly _moduleOptions = this.moduleOptions;
 
     constructor(options: CommandOptions) {
         this.moduleOptions = options;
     }
 
-    getOptions(): CommandOptions | null {
-        return this.moduleOptions;
+    getOptions(): Readonly<CommandOptions> | null {
+        return this.moduleOptions ? this.moduleOptions : null;
     }
 
-    abstract run(msg: Message, args?: any[]): void
+    abstract run(msg: Message, args?: unknown[]): void
 }

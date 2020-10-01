@@ -37,7 +37,7 @@ class CommanderClient extends discord_js_1.default.Client {
                 }
             }
             Utils_1.default.registerModulesIn(this.moduleRegistry, (_c = this._commanderOptions) === null || _c === void 0 ? void 0 : _c.modulePath);
-            Utils_1.default.registerBuiltinModules(this.moduleRegistry);
+            //CommanderUtils.registerBuiltinModules(this.moduleRegistry);
             if ((_d = this._commanderOptions) === null || _d === void 0 ? void 0 : _d.eventModulePath) {
                 let events = await Utils_1.default.registerEventModules(this.eventRegistry, (_e = this._commanderOptions) === null || _e === void 0 ? void 0 : _e.eventModulePath);
                 events.forEach(event => {

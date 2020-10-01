@@ -34,7 +34,7 @@ export default class UserRegistry {
     }
 
     get(id: string): Promise<RegistryUser> {
-        return new Promise( (accept: any) => {
+        return new Promise( (accept) => {
             this.users.forEach(user => {
                 if(user.id == id) accept(user);
             });

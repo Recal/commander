@@ -8,6 +8,5 @@ export default class CommanderUtils {
     static canExecute(level: number, userLevel: number, commandRequiresOwner: boolean, isOwner: boolean): boolean;
     static handle(client: CommanderClient, msg: Message, user: GuildMember | User): Promise<void>;
     static registerModulesIn(registry: ModuleRegistry, path: string): void;
-    static registerBuiltinModules(registry: ModuleRegistry): void;
     static registerEventModules(registry: EventRegistry, path: string): Promise<EventModule[]>;
 }

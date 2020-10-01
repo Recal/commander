@@ -5,16 +5,16 @@ type EventOptions = {
 
 export default abstract class EventModule {
 
-    private _options: EventOptions | null = null;
+    private options: EventOptions | null = null;
 
     constructor(options: EventOptions) {
-        this._options = options;
+        this.options = options;
     }
 
     getOptions(): EventOptions | null {
-        return this._options;
+        return this.options;
     }
 
 
-    abstract handle(data: any): void;
+    abstract handle(data: unknown): void;
 }

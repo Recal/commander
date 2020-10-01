@@ -1,7 +1,7 @@
 import CommandModule from '../module/Module';
 declare type NullOr<T> = T | null;
 export default class Registry {
-    private _commands;
+    private commands;
     add(module: CommandModule): boolean;
     register(module: CommandModule): boolean;
     remove(moduleName: string): void;

@@ -8,9 +8,8 @@ declare type CommandOptions = {
 };
 export default abstract class CommandModule {
     private moduleOptions;
-    readonly _moduleOptions: CommandOptions | null;
     constructor(options: CommandOptions);
-    getOptions(): CommandOptions | null;
-    abstract run(msg: Message, args?: any[]): void;
+    getOptions(): Readonly<CommandOptions> | null;
+    abstract run(msg: Message, args?: unknown[]): void;
 }
 export {};

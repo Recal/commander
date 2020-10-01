@@ -8,7 +8,7 @@ import EventModule from '../module/EventModule';
 
 export default class CommanderUtils {
     static addCachedUsers(client: CommanderClient, cache: Collection<string, User>) {
-        cache.each( (user: User, _: string, __: Collection<string, User>) => {
+        cache.each( (user, _, __) => {
 
 
             const user_is_owner = client.getCommanderOptions().owners.includes(user.id);
@@ -28,9 +28,8 @@ export default class CommanderUtils {
     
 
     static canExecute(level: number, userLevel: number, commandRequiresOwner: boolean, isOwner: boolean) {
-        if(commandRequiresOwner) {
-            return isOwner;
-        }
+        if(commandRequiresOwner) return isOwner;
+
         return (level == userLevel && !commandRequiresOwner || isOwner);
     }
 

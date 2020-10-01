@@ -3,9 +3,9 @@ declare type EventOptions = {
     customName: string;
 };
 export default abstract class EventModule {
-    private _options;
+    private options;
     constructor(options: EventOptions);
     getOptions(): EventOptions | null;
-    abstract handle(data: any): void;
+    abstract handle(data: unknown): void;
 }
 export {};

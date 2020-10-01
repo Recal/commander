@@ -3,11 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class CommandModule {
     constructor(options) {
         this.moduleOptions = null;
-        this._moduleOptions = this.moduleOptions;
         this.moduleOptions = options;
     }
     getOptions() {
-        return this.moduleOptions;
+        return this.moduleOptions ? this.moduleOptions : null;
     }
 }
 exports.default = CommandModule;

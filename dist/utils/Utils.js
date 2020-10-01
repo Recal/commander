@@ -26,87 +26,73 @@ const glob_1 = __importDefault(require("glob"));
 class CommanderUtils {
     static addCachedUsers(client, cache) {
         cache.each((user, _, __) => {
-            if (client.getCommanderOptions().owners.indexOf(user.id) != -1) {
-                client.getUsers().register({
-                    user: user,
-                    id: user.id,
-                    username: user.username,
-                    tag: user.tag,
-                    level: Infinity,
-                    owner: true
-                });
-            }
-            client.getUsers().register({
+            const user_is_owner = client.getCommanderOptions().owners.includes(user.id);
+            const registryUser = {
                 user: user,
                 id: user.id,
                 username: user.username,
                 tag: user.tag,
-                level: 0,
-                owner: false
-            });
+                level: user_is_owner ? Infinity : 0,
+                owner: user_is_owner
+            };
+            client.getUsers().register(registryUser);
         });
-        console.log("[CACHE/SUCCESS] Cached " + cache.size + " user(s).");
     }
     static canExecute(level, userLevel, commandRequiresOwner, isOwner) {
-        if (commandRequiresOwner) {
+        if (commandRequiresOwner)
             return isOwner;
-        }
         return (level == userLevel && !commandRequiresOwner || isOwner);
     }
     static async handle(client, msg, user) {
-        let prefix = client.getCommanderOptions().prefix;
+        const prefix = client.getCommanderOptions().prefix;
         if (msg.content.startsWith(prefix)) {
             const registry = client.getModules();
             const userRegistry = client.getUsers();
-            let registryUser = await userRegistry.get(user.id);
-            let args = msg.content.split(" ");
-            let commandName = args[0];
+            const registryUser = await userRegistry.get(user.id);
+            const args = msg.content.split(" ");
+            const commandName = args[0];
             args.shift();
-            let command = await registry.getFromPotentialAlias(commandName.toLowerCase().replace(new RegExp("^" + prefix), ''));
+            const command = await registry.getFromPotentialAlias(commandName.toLowerCase().replace(new RegExp("^" + prefix), ''));
             if (command) {
-                let commandOptions = command.getOptions();
+                const commandOptions = command.getOptions();
                 if (this.canExecute(commandOptions.level, registryUser.level, commandOptions.owner, registryUser.owner))
                     command.run(msg, [args]);
             }
         }
     }
     static registerModulesIn(registry, path) {
-        console.log("[REGISTRY/INFO] Procesing modules...");
-        let localCount = 0;
         glob_1.default(path + '/**.+(ts|js)', async (err, matches) => {
             if (err)
                 throw err;
-            for (let file of matches) {
+            for (const file of matches) {
                 const Command = (await Promise.resolve().then(() => __importStar(require(file)))).default;
-                let registryCommand = new Command();
-                let name = registryCommand.getOptions().name;
-                if (await registry.get(name) == null) {
+                const registryCommand = new Command();
+                const name = registryCommand.getOptions().name;
+                if (!(await registry.get(name))) {
                     registry.add(registryCommand);
-                    localCount += 1;
                 }
                 else {
-                    throw "[REGISTRY/ERROR]" + " A local module with indentifer '" + name + "'" + ' exists. (File: ' + file + ')';
+                    throw `A local module with name '${name}' exists. (File: '${file}')'`;
                 }
             }
-            console.log("[REGISTRY/INFO] Registered a total of " + localCount + " command module(s).");
         });
     }
-    static registerBuiltinModules(registry) {
+    /*
+    static registerBuiltinModules(registry: ModuleRegistry) {
         let localCount = 0;
-        glob_1.default(process.cwd() + '/src/builtins/**.+(ts|js)', async (err, matches) => {
-            if (err)
-                throw err;
-            for (let file of matches) {
-                const Command = (await Promise.resolve().then(() => __importStar(require(file)))).default;
+        glob(process.cwd() + '/src/builtins/**.+(ts|js)', async (err, matches) => {
+            if(err) throw err;
+
+            for(let file of matches) {
+                const Command = (await import(file)).default;
+
                 let registryCommand = new Command();
-                if (registry.add(registryCommand))
-                    localCount += 1;
+                if(registry.add(registryCommand as CommandModule)) localCount += 1;
             }
-            console.log("[REGISTRY/INFO] Registered a total of " + localCount + " builtin module(s).");
-        });
+        })
     }
+    */
     static registerEventModules(registry, path) {
-        let localCount = 0;
         return new Promise((accept) => {
             var events = [];
             glob_1.default(path + '/**.+(ts|js)', async (err, matches) => {
@@ -116,10 +102,8 @@ class CommanderUtils {
                     const Event = (await Promise.resolve().then(() => __importStar(require(file)))).default;
                     let registryEvent = new Event();
                     events.push(registryEvent);
-                    if (registry.add(registryEvent))
-                        localCount += 1;
+                    registry.add(registryEvent);
                 }
-                console.log("[REGISTRY/INFO] Registered a total of " + localCount + " event module(s).");
                 accept(events);
             });
         });
