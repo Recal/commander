@@ -25,7 +25,7 @@ export default class Registry {
         });
     }
 
-    get(moduleName: string): Promise<CommandModule | null> {
+    get(moduleName: string): Promise<NullOr<CommandModule>> {
         return new Promise( (accept: any) => {
             this._commands.forEach(command => {
                  if(command.getOptions()?.name == moduleName) accept(command); 

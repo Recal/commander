@@ -5,7 +5,7 @@ export default class Registry {
     add(module: CommandModule): boolean;
     register(module: CommandModule): boolean;
     remove(moduleName: string): void;
-    get(moduleName: string): Promise<CommandModule | null>;
+    get(moduleName: string): Promise<NullOr<CommandModule>>;
     getList(): CommandModule[];
     getFromPotentialAlias(alias: string): Promise<NullOr<CommandModule>>;
 }
