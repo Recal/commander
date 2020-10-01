@@ -24,7 +24,6 @@ export default class CommanderUtils {
             
             client.getUsers().register(registryUser);
         });
-        console.log("[CACHE/SUCCESS] Cached " + cache.size + " user(s).");
     }
     
 
@@ -63,8 +62,6 @@ export default class CommanderUtils {
     }
 
     static registerModulesIn(registry: ModuleRegistry, path: string) {
-        console.log("[REGISTRY/INFO] Procesing modules...");
-        let localCount = 0;
         glob(path + '/**.+(ts|js)', async (err, matches) => {
             if(err) throw err;
 
@@ -76,13 +73,10 @@ export default class CommanderUtils {
 
                 if(!(await registry.get(name))) {
                     registry.add(registryCommand as CommandModule);
-                    localCount += 1;
                 } else {
-                   throw "[REGISTRY/ERROR]" + " A local module with indentifer '" + name + "'" + ' exists. (File: ' + file + ')';                  
+                   throw `A local module with name '${name}' exists. (File: '${file}')'`                
                 }
             }
-
-            console.log("[REGISTRY/INFO] Registered a total of " + localCount + " command module(s).");
         });
     }
 
@@ -98,16 +92,11 @@ export default class CommanderUtils {
                 let registryCommand = new Command();
                 if(registry.add(registryCommand as CommandModule)) localCount += 1;
             }
-
-            console.log("[REGISTRY/INFO] Registered a total of " + localCount + " builtin module(s).");
         })
     }
     */
 
     static registerEventModules(registry: EventRegistry, path: string): Promise<EventModule[]> {
-        let localCount = 0;
-       
-
         return new Promise( ( accept ) => {
                 var events: EventModule[] = [];
                 glob(path + '/**.+(ts|js)', async (err, matches) => {
@@ -119,10 +108,8 @@ export default class CommanderUtils {
                         let registryEvent = new Event();
                         events.push(registryEvent);
 
-                        if(registry.add(registryEvent as EventModule)) localCount += 1;
+                        registry.add(registryEvent as EventModule);
                     }
-
-                    console.log("[REGISTRY/INFO] Registered a total of " + localCount + " event module(s).");
                     accept(events);
                 })
         });
