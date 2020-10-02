@@ -36,26 +36,38 @@ export default class CommanderUtils {
     static async handle(client: CommanderClient, msg: Message, user: GuildMember | User) {
         const prefix = client.getCommanderOptions()!.prefix;
         if(msg.content.startsWith(prefix)) {
+            
             const registry = client.getModules();
             const userRegistry = client.getUsers();
-
             const registryUser = await userRegistry.get(user.id);
-
             const args: string[] = msg.content.split(" ");
             const commandName = args[0];
+
+            const userLevel = registryUser.level;
+            const userIsOwner = registryUser.owner;
+    
+            
             args.shift();
 
             const command = await registry.getFromPotentialAlias(commandName.toLowerCase().replace(new RegExp("^"+prefix), ''));
 
             if(command) {
                 const commandOptions = command.getOptions()!;
+                const commandLevel = commandOptions.level as number;
+                const commandRequiresOwner = commandOptions.owner;
+
                 if(
-                    this.canExecute(
-                        commandOptions.level as number, 
-                        registryUser.level, 
-                        commandOptions.owner, 
-                        registryUser.owner
-                    )) command.run(msg, [args]);
+                    this.canExecute(commandLevel, userLevel, commandRequiresOwner, userIsOwner)
+                )  {
+                        const required_arg_length = command.getOptions()?.required_args_length ? command.getOptions()?.required_args_length : 0;
+
+                        if(command.getOptions()?.required_args_length == args.length) {
+                            command.run(msg, [args]);
+                            return;
+                        }
+
+                        /* I don't know what to do here yet, potentially send a message saying you didn't meet the argument count. */
+                    }
             }
         }
     }
