@@ -5,7 +5,8 @@ type CommandOptions = {
     level: number,
     group: string,
     aliases?: string[],
-    owner: boolean   
+    owner: boolean,
+    required_args_length?: number,
 }
 
 
