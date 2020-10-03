@@ -1,4 +1,4 @@
-declare module 'commander/module/Module' {
+declare module 'djs-commander/module/Module' {
 	import { Message } from 'discord.js'; type CommandOptions = {
 	    name: string;
 	    level: number;
@@ -17,8 +17,8 @@ declare module 'commander/module/Module' {
 	export {};
 
 }
-declare module 'commander/registry/ModuleRegistry' {
-	import CommandModule from 'commander/module/Module'; type NullOr<T> = T | null;
+declare module 'djs-commander/registry/ModuleRegistry' {
+	import CommandModule from 'djs-commander/module/Module'; type NullOr<T> = T | null;
 	export default class Registry {
 	    private commands;
 	    add(module: CommandModule): boolean;
@@ -31,7 +31,7 @@ declare module 'commander/registry/ModuleRegistry' {
 	export {};
 
 }
-declare module 'commander/module/EventModule' {
+declare module 'djs-commander/module/EventModule' {
 	 type EventOptions = {
 	    event: string;
 	    customName: string;
@@ -45,8 +45,8 @@ declare module 'commander/module/EventModule' {
 	export {};
 
 }
-declare module 'commander/registry/EventRegistry' {
-	import EventModule from 'commander/module/EventModule';
+declare module 'djs-commander/registry/EventRegistry' {
+	import EventModule from 'djs-commander/module/EventModule';
 	export default class EventRegistry {
 	    private events;
 	    add(event: EventModule): boolean;
@@ -56,12 +56,12 @@ declare module 'commander/registry/EventRegistry' {
 	}
 
 }
-declare module 'commander/utils/Utils' {
+declare module 'djs-commander/utils/Utils' {
 	import { Collection, User, Message, GuildMember } from 'discord.js';
-	import { CommanderClient } from 'commander/client';
-	import ModuleRegistry from 'commander/registry/ModuleRegistry';
-	import EventRegistry from 'commander/registry/EventRegistry';
-	import EventModule from 'commander/module/EventModule';
+	import { CommanderClient } from 'djs-commander/client';
+	import ModuleRegistry from 'djs-commander/registry/ModuleRegistry';
+	import EventRegistry from 'djs-commander/registry/EventRegistry';
+	import EventModule from 'djs-commander/module/EventModule';
 	export default class CommanderUtils {
 	    static addCachedUsers(client: CommanderClient, cache: Collection<string, User>): void;
 	    static canExecute(level: number, userLevel: number, commandRequiresOwner: boolean, isOwner: boolean): boolean;
@@ -72,7 +72,7 @@ declare module 'commander/utils/Utils' {
 	}
 
 }
-declare module 'commander/registry/UserRegistry' {
+declare module 'djs-commander/registry/UserRegistry' {
 	import { User } from 'discord.js'; type RegistryUser = {
 	    user: User;
 	    id: string;
@@ -91,9 +91,9 @@ declare module 'commander/registry/UserRegistry' {
 	export {};
 
 }
-declare module 'commander/provider/Provider' {
-	import UserRegistry from 'commander/registry/UserRegistry';
-	import { CommanderClient } from 'commander/client'; type ExpectedProviderJSON = {
+declare module 'djs-commander/provider/Provider' {
+	import UserRegistry from 'djs-commander/registry/UserRegistry';
+	import { CommanderClient } from 'djs-commander/client'; type ExpectedProviderJSON = {
 	    id: string;
 	    level: number;
 	    owner: boolean;
@@ -105,19 +105,19 @@ declare module 'commander/provider/Provider' {
 	export {};
 
 }
-declare module 'commander/provider/ProviderType' {
+declare module 'djs-commander/provider/ProviderType' {
 	export enum ProviderType {
 	    JSON = 0,
 	    DATABASE = 1
 	}
 
 }
-declare module 'commander/client' {
+declare module 'djs-commander/client' {
 	import Discord, { ClientOptions } from 'discord.js';
-	import UserRegistry from 'commander/registry/UserRegistry';
-	import ModuleRegistry from 'commander/registry/ModuleRegistry';
-	import CommandModule from 'commander/module/Module';
-	import { ProviderType } from 'commander/provider/ProviderType'; type CommanderOptions = {
+	import UserRegistry from 'djs-commander/registry/UserRegistry';
+	import ModuleRegistry from 'djs-commander/registry/ModuleRegistry';
+	import CommandModule from 'djs-commander/module/Module';
+	import { ProviderType } from 'djs-commander/provider/ProviderType'; type CommanderOptions = {
 	    prefix: string;
 	    modulePath: string;
 	    eventModulePath?: string;
@@ -144,16 +144,16 @@ declare module 'commander/client' {
 	export {};
 
 }
-declare module 'commander/index' {
+declare module 'djs-commander/index' {
 	export {};
 
 }
-declare module 'commander/tests/test' {
+declare module 'djs-commander/tests/test' {
 	export {};
 
 }
-declare module 'commander/tests/events/a' {
-	import EventModule from 'commander/module/EventModule';
+declare module 'djs-commander/tests/events/a' {
+	import EventModule from 'djs-commander/module/EventModule';
 	import { Message } from 'discord.js';
 	export default class MessageCreate extends EventModule {
 	    constructor();
@@ -161,8 +161,8 @@ declare module 'commander/tests/events/a' {
 	}
 
 }
-declare module 'commander/tests/modules/a' {
-	import Module from 'commander/module/Module';
+declare module 'djs-commander/tests/modules/a' {
+	import Module from 'djs-commander/module/Module';
 	import { Message } from 'discord.js';
 	export default class A extends Module {
 	    constructor();
@@ -170,8 +170,8 @@ declare module 'commander/tests/modules/a' {
 	}
 
 }
-declare module 'commander/tests/modules/b' {
-	import Module from 'commander/module/Module';
+declare module 'djs-commander/tests/modules/b' {
+	import Module from 'djs-commander/module/Module';
 	import { Message } from 'discord.js';
 	export default class A extends Module {
 	    constructor();

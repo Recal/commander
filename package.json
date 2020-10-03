@@ -1,7 +1,8 @@
 {
-  "name": "commander",
+  "name": "djs-commander",
   "version": "0.0.1",
-  "description": "Command Handler made in typescript.",
+  "description": "Bad Command Handler made in typescript.",
+  "private": false,
   "main": "dist/index.js",
   "dependencies": {
     "@types/glob": "^7.1.3",
@@ -9,7 +10,7 @@
     "discord.js": "^12.3.1",
     "glob": "^7.1.6"
   },
-  "types": "./dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "devDependencies": {},
   "scripts": {
     "build": "tsc"
