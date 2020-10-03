@@ -1,3 +1,3 @@
 # commander
 Bad command handler.<br>
-<b>Any Pull Requests are appreciated considering I have no fucking clue what I'm doing.</b>
+<b>Pretty much all Pull Requests are appreciated considering I have no fucking clue what I'm doing and would appreciate the help.</b>
