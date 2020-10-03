@@ -130,6 +130,11 @@ export default class CommanderUtils {
                     return;
                 }
 
+                if(registryCommand.getOptions()!.name.match(/\s+/g) != null) {
+                    throw `Module name cannot contain spaces. (File: '${file}')`;
+                    return;
+                }
+
                 const name = registryCommand.getOptions()!.name;
 
                 if(!(await registry.get(name))) {
@@ -167,6 +172,16 @@ export default class CommanderUtils {
                         const Event = (await import(file)).default;
 
                         let registryEvent = new Event() as EventModule;
+
+                        if(!registryEvent.getOptions()) {
+                            throw `Event must have valid options. (File: '${file}')`;
+                            return;
+                        }
+
+                        if(registryEvent.getOptions()!.customName.match(/\s+/g) != null) {
+                            throw `Event name cannot contain spaces. (File: '${file}')`;
+                            return;
+                        }
 
                         events.push(registryEvent);
 
