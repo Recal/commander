@@ -22,7 +22,7 @@ type CommanderOptions = {
 
 export class CommanderClient extends Discord.Client {
 
-    private _commanderOptions: CommanderOptions | null = null;
+    private commanderOptions: CommanderOptions | null = null;
     private userRegistry: UserRegistry = new UserRegistry();
     private moduleRegistry: ModuleRegistry = new ModuleRegistry();
     private eventRegistry: EventRegistry = new EventRegistry();
@@ -31,13 +31,13 @@ export class CommanderClient extends Discord.Client {
     constructor(options: ClientOptions, commanderOptions: CommanderOptions) {
         super(options);
 
-        this._commanderOptions = commanderOptions;
+        this.commanderOptions = commanderOptions;
 
         this.on('ready', async () => {
             CommanderUtils.addCachedUsers(this, this.users.cache);
 
-            if(this._commanderOptions?.providerConfig) {
-                let options = this._commanderOptions?.providerConfig;
+            if(this.commanderOptions?.providerConfig) {
+                let options = this.commanderOptions?.providerConfig;
                 
                 switch(options.type) {
                     case ProviderType.DATABASE:
@@ -50,10 +50,10 @@ export class CommanderClient extends Discord.Client {
                 }
             }
 
-            CommanderUtils.registerModulesIn(this.moduleRegistry, this._commanderOptions?.modulePath as string);
+            CommanderUtils.registerModulesIn(this.moduleRegistry, this.commanderOptions?.modulePath as string);
             //CommanderUtils.registerBuiltinModules(this.moduleRegistry);
-            if(this._commanderOptions?.eventModulePath) {
-                let events = await CommanderUtils.registerEventModules(this.eventRegistry, this._commanderOptions?.eventModulePath);
+            if(this.commanderOptions?.eventModulePath) {
+                let events = await CommanderUtils.registerEventModules(this.eventRegistry, this.commanderOptions?.eventModulePath);
                 events.forEach(event => {
                     let opt = event.getOptions()!;
                     this.on(opt.event, event.handle);
@@ -80,7 +80,7 @@ export class CommanderClient extends Discord.Client {
     }
 
     getCommanderOptions(): CommanderOptions  {
-        return this._commanderOptions as CommanderOptions;
+        return this.commanderOptions as CommanderOptions;
     }
    
     registerModule(module: CommandModule) {
@@ -88,9 +88,9 @@ export class CommanderClient extends Discord.Client {
     }
 
     blacklist(id: string) {
-        if(this._commanderOptions?.blacklist) {
-            let list = this._commanderOptions.blacklist;
-            if(!list.includes(id)) this._commanderOptions.blacklist.push(id);
+        if(this.commanderOptions?.blacklist) {
+            const list = this.commanderOptions.blacklist;
+            if(!list.includes(id)) this.commanderOptions.blacklist.push(id);
         }
     }
 }
