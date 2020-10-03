@@ -7,6 +7,7 @@ type CommandOptions = {
     aliases?: string[],
     owner: boolean,
     required_args_length?: number,
+    is_guild_only: boolean
 }
 
 
