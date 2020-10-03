@@ -10,6 +10,7 @@ export default class A extends Module {
             group: "t",
             aliases: ['aa'],
             owner: true,
+            is_guild_only: false
         })
     }
 

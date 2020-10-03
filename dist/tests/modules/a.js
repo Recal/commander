@@ -12,6 +12,7 @@ class A extends Module_1.default {
             group: "t",
             aliases: ['aa'],
             owner: true,
+            is_guild_only: false
         });
     }
     run(msg) {

@@ -5,6 +5,8 @@ declare type CommandOptions = {
     group: string;
     aliases?: string[];
     owner: boolean;
+    required_args_length?: number;
+    is_guild_only: boolean;
 };
 export default abstract class CommandModule {
     private moduleOptions;
