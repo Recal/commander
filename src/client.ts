@@ -37,13 +37,13 @@ export class CommanderClient extends Discord.Client {
             CommanderUtils.addCachedUsers(this, this.users.cache);
 
             if(this.commanderOptions?.providerConfig) {
-                let options = this.commanderOptions?.providerConfig;
+                const opts = this.commanderOptions?.providerConfig;
                 
-                switch(options.type) {
+                switch(opts.type) {
                     case ProviderType.DATABASE:
                         break;
                     case ProviderType.JSON:
-                        if(options.path.endsWith('.json')) Provider.fromJSON(this, this.userRegistry, require(options.path));
+                        if(opts.path.endsWith('.json')) Provider.fromJSON(this, this.userRegistry, require(opts.path));
                         break;
                     default:
                         break;
@@ -53,19 +53,16 @@ export class CommanderClient extends Discord.Client {
             CommanderUtils.registerModulesIn(this.moduleRegistry, this.commanderOptions?.modulePath as string);
             //CommanderUtils.registerBuiltinModules(this.moduleRegistry);
             if(this.commanderOptions?.eventModulePath) {
-                let events = await CommanderUtils.registerEventModules(this.eventRegistry, this.commanderOptions?.eventModulePath);
+                const events = await CommanderUtils.registerEventModules(this.eventRegistry, this.commanderOptions?.eventModulePath);
                 events.forEach(event => {
-                    let opt = event.getOptions()!;
+                    const opt = event.getOptions()!;
                     this.on(opt.event, event.handle);
                 })
             }
         });
         this.on('message', (msg: Message) => {
-            if(msg.author.id == msg.client.user!.id  || 
-               commanderOptions.blacklist && commanderOptions.blacklist.includes(msg.author.id)
-            ) return;
-
-            
+            const isBlacklisted = commanderOptions.blacklist && commanderOptions.blacklist.includes(msg.author.id);
+            if(msg.author.id == msg.client.user!.id  || isBlacklisted) return;
 
             CommanderUtils.handle(this, msg, msg.author);
         });
