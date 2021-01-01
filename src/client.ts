@@ -17,11 +17,11 @@ export default class Commander extends Client {
 
         this.on('ready', () => {
             this.InternalCache = this.users.cache.map(x => x);
-            // TBD
+            // TODO: TBD
         })
 
         if(copts.options.eventsPath) {
-            // TBD
+            // TODO: TBD
         }
     }
 
